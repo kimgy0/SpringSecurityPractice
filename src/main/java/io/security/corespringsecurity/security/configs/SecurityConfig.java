@@ -76,6 +76,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
 
         .and()
-                .formLogin();
+                .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/login_proc")
+                .defaultSuccessUrl("/")//폼태그에 액션태그를 이용해야함.
+                .permitAll(); // /login 페이지는 누구나 접근가능해야하기 때무넹 .loginPage("/login") 에대한허용.
+
     }
 }
