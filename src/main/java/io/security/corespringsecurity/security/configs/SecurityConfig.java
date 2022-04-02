@@ -88,7 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
 
                 .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler())
-                .and().addFilterBefore(ajaxLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
+                .and()
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/login_proc")
@@ -103,17 +103,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
-    @Bean
-    public AjaxLoginProcessingFilter ajaxLoginProcessingFilter() throws Exception {
-        AjaxLoginProcessingFilter ajaxLoginProcessingFilter = new AjaxLoginProcessingFilter();
-        ajaxLoginProcessingFilter.setAuthenticationManager(authenticationManager());
-        return ajaxLoginProcessingFilter;
-    }
 
-    @Bean
-    public AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManagerBean();
-    }
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler(){
