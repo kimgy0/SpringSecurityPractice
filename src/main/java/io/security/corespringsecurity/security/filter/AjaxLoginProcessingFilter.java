@@ -41,9 +41,11 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
         AjaxAuthenticationToken ajaxAuthenticationToken = new AjaxAuthenticationToken(accountDto.getUsername(), accountDto.getPassword());
 
         return getAuthenticationManager().authenticate(ajaxAuthenticationToken);
+        //AbstractAuthenticationProcessingFilter 리턴받고 올라가서 보기
         // getAuthenticationManager() 상위 부모클래스의 메서드.
         // 실질적으로 매니저는 Provider 호출하는데 이 Provider 는 Supported 라는 메서드를 가지고 있는데 이 메서드는 토큰타입이 해당 프로바이더에 맞는 토큰 타입에 대해서만
         // 프로바이더가 인증을 하는데 지금은 우리가 프로바이더를 따로 만들어주지 않아서 인증에 실패한다.
+        // 프로바이더 실행되면 꼭 필터체인 프록시 확인하기.
     }
 
     private boolean isAjax(HttpServletRequest request) {

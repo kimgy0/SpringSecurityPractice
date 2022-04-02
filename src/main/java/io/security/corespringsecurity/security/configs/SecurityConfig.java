@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -29,6 +30,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @Slf4j
 @RequiredArgsConstructor
+@Order(1)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
@@ -99,7 +101,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();// /login 페이지는 누구나 접근가능해야하기 때무넹 .loginPage("/login") 에대한허용.
 
         //POST 방식으로 요청할 때는 일반적으로 CSRF 토큰을 검사하기 떄문에 잠시 꺼두자.
-        http.csrf().disable();
+        //http.csrf().disable();
 
     }
 
