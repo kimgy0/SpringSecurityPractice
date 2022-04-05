@@ -33,12 +33,15 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
             throw new IllegalStateException("Authentication is not supported");
         }
 
-        AccountDto accountDto = objectMapper.readValue(httpServletRequest.getReader(), AccountDto.class);
-        if(StringUtils.isEmpty(accountDto.getUsername()) || StringUtils.isEmpty(accountDto.getPassword())){
+        AccountDto accountDto = objectMapper.readValue(httpServletRequest.getReader()
+                                                        , AccountDto.class);
+        if(StringUtils.isEmpty(accountDto.getUsername())
+                || StringUtils.isEmpty(accountDto.getPassword())){
             throw new IllegalArgumentException("username or password is not empty");
         }
 
-        AjaxAuthenticationToken ajaxAuthenticationToken = new AjaxAuthenticationToken(accountDto.getUsername(), accountDto.getPassword());
+        AjaxAuthenticationToken ajaxAuthenticationToken
+                = new AjaxAuthenticationToken(accountDto.getUsername(), accountDto.getPassword());
 
         return getAuthenticationManager().authenticate(ajaxAuthenticationToken);
         //AbstractAuthenticationProcessingFilter 리턴받고 올라가서 보기
@@ -49,7 +52,6 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
     }
 
     private boolean isAjax(HttpServletRequest request) {
-        // Ajax 인지 아닌지를 판단하게 되는 메서드
         if("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))){
             return true;
         }
