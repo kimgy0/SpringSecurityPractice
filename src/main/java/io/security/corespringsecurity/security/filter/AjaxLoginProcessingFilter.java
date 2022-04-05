@@ -22,7 +22,7 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
 
     public AjaxLoginProcessingFilter() {
         //super(defaultFilterProcessesUrl);
-        super(new AntPathRequestMatcher("/api/login"));
+        super(new AntPathRequestMatcher("/api/login","POST"));
         // -> 이정보가 매칭이 되면 이 필터가 로그인을 처리할 수 있도록 필터가 동작한다.
     }
 
@@ -35,8 +35,7 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
 
         AccountDto accountDto = objectMapper.readValue(httpServletRequest.getReader()
                                                         , AccountDto.class);
-        if(StringUtils.isEmpty(accountDto.getUsername())
-                || StringUtils.isEmpty(accountDto.getPassword())){
+        if(StringUtils.isEmpty(accountDto.getUsername()) || StringUtils.isEmpty(accountDto.getPassword())){
             throw new IllegalArgumentException("username or password is not empty");
         }
 

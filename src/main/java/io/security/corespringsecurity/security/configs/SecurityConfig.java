@@ -32,8 +32,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @Slf4j
 @RequiredArgsConstructor
+
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userDetailsService;
     private final AuthenticationDetailsSource formAuthenticationDetailsSource;
     private final CustomAuthenticationSuccessHandler successHandler;
@@ -47,33 +49,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
 
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        return new CustomAuthenticationProvider(userDetailsService,passwordEncoder());
-        //이제는 userDetails 를 직접쓰는 것이 아니라 프로바이더를 구현했기 때문에 프로바이더만 등록해주면 된다.
+        return new CustomAuthenticationProvider(userDetailsService,passwordEncoder);
     }
 
-    /** [branch -> part01]
-    @Override ->
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        String password = passwordEncoder().encode("1111");
-        auth.inMemoryAuthentication().withUser("user").password(password).roles("USER");
-        auth.inMemoryAuthentication().withUser("manager").password(password).roles("USER","MANAGER");
-        auth.inMemoryAuthentication().withUser("admin").password(password).roles("USER","MANAGER","ADMIN");
-
-         단순 user manager admin 권한만 주면 계층적으로 누가 더 높은지를 모른다.
-         그래서 리스트 형태로 넣어준다.
-
-    }
-    **/
-
-
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        //return new BCryptPasswordEncoder();
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -90,7 +71,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/config").hasRole("ADMIN")
                 .anyRequest().authenticated()
 
-                .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+                .and().exceptionHandling()
+                    .accessDeniedHandler(accessDeniedHandler())
                 .and()
                 .formLogin()
                 .loginPage("/login")
