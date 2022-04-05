@@ -40,6 +40,15 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
         return new AjaxAuthenticationProvider(userDetailsService,passwordEncoder());
     }
 
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        // 프로바이더 등록
+        auth.authenticationProvider(ajaxAuthenticationProvider());
+    }
+
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -53,8 +62,8 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(ajaxLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
 
 
-        http
-                .exceptionHandling()
+
+        http.exceptionHandling()
                 .accessDeniedHandler(ajaxAccessDeniedHandler())
                 .authenticationEntryPoint(new AjaxLoginAuthenticationEntryPoint());
 
@@ -82,19 +91,10 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(ajaxAuthenticationProvider());
-    }
-
-
-
-    @Bean
     public AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler(){
         return new AjaxAuthenticationFailureHandler();
     }
 
-    @Bean
     public AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler(){
         return new AjaxAuthenticationSuccessHandler();
     }
