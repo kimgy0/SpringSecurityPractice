@@ -70,6 +70,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/mypage").hasRole("USER")
                 .antMatchers("/messages").hasRole("MANAGER")
                 .antMatchers("/config").hasRole("ADMIN")
+                /*
+                 * 인가처리할 때 이 정보를 파싱하고 map 객체에 담아서 권한정보를 이용하는 방법을 살펴본다.
+                 */
                 .anyRequest().authenticated()
 
                 .and().exceptionHandling()
