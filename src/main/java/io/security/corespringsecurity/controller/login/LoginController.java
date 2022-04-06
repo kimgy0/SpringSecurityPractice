@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginController {
 
     //로그인 실패시 오는 컨트롤러
-    @GetMapping("/login")
+    @GetMapping(value = {"/login","/api/login"})
     public String loginException(@RequestParam(value = "error",required = false) String error,
                         @RequestParam(value = "exception",required = false) String exception, Model model){
 
@@ -47,7 +47,7 @@ public class LoginController {
         return "redirect:/login";
     }
 
-    @GetMapping("/denied")
+    @GetMapping(value = {"/denied","/api/denied"})
     public String accessDenied(@RequestParam(value = "exception", required = true) String exception, Model model){
 
 
