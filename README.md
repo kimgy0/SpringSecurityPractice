@@ -12,5 +12,5 @@
 - [공부 기록 노션](https://complete-bill-893.notion.site/Spring-Security-82575c564be24b75a88214540f5da94f) 
 
 <hr>
-저작권 문제나 다른 문의 사항은 📩 **01086055223@hanmail.net** 로 남겨주시면 감사하겠습니다.
+저작권 문제나 다른 문의 사항은 📩 01086055223@hanmail.net 로 남겨주시면 감사하겠습니다.
 
