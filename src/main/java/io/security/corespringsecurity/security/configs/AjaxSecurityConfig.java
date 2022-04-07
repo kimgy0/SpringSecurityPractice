@@ -2,6 +2,7 @@ package io.security.corespringsecurity.security.configs;
 
 import io.security.corespringsecurity.security.common.AjaxLoginAuthenticationEntryPoint;
 import io.security.corespringsecurity.security.factory.UrlResourcesMapFactoryBean;
+import io.security.corespringsecurity.security.filter.PermitAllFilter;
 import io.security.corespringsecurity.security.handler.AjaxAccessDeniedHandler;
 import io.security.corespringsecurity.security.handler.AjaxAuthenticationFailureHandler;
 import io.security.corespringsecurity.security.handler.AjaxAuthenticationSuccessHandler;
@@ -38,6 +39,8 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final SecurityResourceService securityResourceService;
+
+    private String[] permitAllResources = {"/","/login","/user/login/**"};
 
 
     @Bean
@@ -131,7 +134,8 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
     // 여기 부터는 인가처리에 관한 FilterSecurityInterceptor 커스텀 해서 등록
     @Bean
     public FilterSecurityInterceptor customFilterSecurityInterceptor() throws Exception {
-        FilterSecurityInterceptor filterSecurityInterceptor = new FilterSecurityInterceptor();
+        //FilterSecurityInterceptor filterSecurityInterceptor = new FilterSecurityInterceptor();
+        PermitAllFilter filterSecurityInterceptor = new PermitAllFilter();
         filterSecurityInterceptor.setSecurityMetadataSource(urlFilterInvocationSecurityMetadataSource());
         filterSecurityInterceptor.setAccessDecisionManager(affirmativeBased());
         filterSecurityInterceptor.setAuthenticationManager(authenticationManagerBean());
