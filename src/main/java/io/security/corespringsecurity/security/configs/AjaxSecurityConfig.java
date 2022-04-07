@@ -12,10 +12,14 @@ import io.security.corespringsecurity.service.SecurityResourceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Role;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.access.vote.AffirmativeBased;
+import org.springframework.security.access.vote.RoleHierarchyVoter;
 import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -29,6 +33,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -99,6 +104,7 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
                 .setAuthenticationManager(authenticationManagerBean())
                 .loginProcessingUrl("/api/login");
     }
+    //dsl 로 삭제
 //    @Bean
 //    public AjaxLoginProcessingFilter ajaxLoginProcessingFilter() throws Exception {
 //        AjaxLoginProcessingFilter ajaxLoginProcessingFilter = new AjaxLoginProcessingFilter();
@@ -151,10 +157,28 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
         return affirmativeBased;
     }
 
-    private List<AccessDecisionVoter<?>> getAccessDecisionVoters() {
-        return Arrays.asList(new RoleVoter());
+
+    //voter 추가 계층 권한 설정
+   private List<AccessDecisionVoter<?>> getAccessDecisionVoters() {
+        List<AccessDecisionVoter<? extends Object>> accessDecisionVoters = new ArrayList<>();
+        accessDecisionVoters.add(roleVoter());
+
+        //return Arrays.asList(new RoleVoter());
+        return accessDecisionVoters;
     }
 
+    //voter 설정
+    @Bean
+    public AccessDecisionVoter<? extends Object> roleVoter() {
+        RoleHierarchyVoter roleHierarchyVoter = new RoleHierarchyVoter(roleHierarchy());
+        return roleHierarchyVoter;
+    }
+
+    @Bean
+    public RoleHierarchyImpl roleHierarchy() {
+        return new RoleHierarchyImpl();
+    }
+    //voter 설정
 
     //======================db 에서 role 가져옴=======================
 
