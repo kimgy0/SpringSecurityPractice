@@ -8,14 +8,14 @@ import java.util.List;
 
 public interface ResourcesRepository extends JpaRepository<Resources, Long> {
 
-//    Resources findByResourceNameAndHttpMethod(String resourceName, String httpMethod);
+    Resources findByResourceNameAndHttpMethod(String resourceName, String httpMethod);
 
     @Query("select r from Resources r join fetch r.roleSet where r.resourceType = 'url' order by r.orderNum desc")
     List<Resources> findAllResources(); // 25:50 초 order by 에 관한 설명
 
-//    @Query("select r from Resources r join fetch r.roleSet where r.resourceType = 'method' order by r.orderNum desc")
-//    List<Resources> findAllMethodResources();
-//
-//    @Query("select r from Resources r join fetch r.roleSet where r.resourceType = 'pointcut' order by r.orderNum desc")
-//    List<Resources> findAllPointcutResources();
+    @Query("select r from Resources r join fetch r.roleSet where r.resourceType = 'method' order by r.orderNum desc")
+    List<Resources> findAllMethodResources();
+
+    @Query("select r from Resources r join fetch r.roleSet where r.resourceType = 'pointcut' order by r.orderNum desc")
+    List<Resources> findAllPointcutResources();
 }

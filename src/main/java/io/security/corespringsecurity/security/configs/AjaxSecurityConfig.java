@@ -153,6 +153,7 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     //======================db 에서 role 가져옴=======================
+
     @Bean
     public FilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource() throws Exception {
         return new UrlFilterInvocationSecurityMetaDataSource(urlResourcesMapFactoryBean().getObject());
