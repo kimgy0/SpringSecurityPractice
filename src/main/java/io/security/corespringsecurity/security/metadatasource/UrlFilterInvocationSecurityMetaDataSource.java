@@ -13,6 +13,11 @@ import java.util.*;
 public class UrlFilterInvocationSecurityMetaDataSource implements FilterInvocationSecurityMetadataSource {
 
     private LinkedHashMap<RequestMatcher, List<ConfigAttribute>> requestMap = new LinkedHashMap<>();
+    //일반 해시맵은 순서를 보장하지 않는다. -> 순서대로 저장할 수 있게끔 생성한다.
+
+    public UrlFilterInvocationSecurityMetaDataSource(LinkedHashMap<RequestMatcher, List<ConfigAttribute>> object) {
+        requestMap = object;
+    }
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
@@ -21,8 +26,8 @@ public class UrlFilterInvocationSecurityMetaDataSource implements FilterInvocati
         HttpServletRequest request = ((FilterInvocation) o).getRequest();
 
 
-        requestMap.put(new AntPathRequestMatcher("/mypage"),
-                Arrays.asList(new SecurityConfig("ROLE_USER")));
+        //requestMap.put(new AntPathRequestMatcher("/mypage"),
+        //       Arrays.asList(new SecurityConfig("ROLE_USER")));
         
         if(requestMap != null){
             Set<Map.Entry<RequestMatcher, List<ConfigAttribute>>> entry = requestMap.entrySet();

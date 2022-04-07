@@ -31,7 +31,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @Slf4j
-@Order(1)
+@Order(2)
 @RequiredArgsConstructor
 
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
