@@ -1,13 +1,7 @@
 package io.security.corespringsecurity.security.listener;
 
-import io.security.corespringsecurity.domain.Account;
-import io.security.corespringsecurity.domain.Resources;
-import io.security.corespringsecurity.domain.Role;
-import io.security.corespringsecurity.domain.RoleHierarchy;
-import io.security.corespringsecurity.repository.ResourcesRepository;
-import io.security.corespringsecurity.repository.RoleHierarchyRepository;
-import io.security.corespringsecurity.repository.RoleRepository;
-import io.security.corespringsecurity.repository.UserRepository;
+import io.security.corespringsecurity.domain.*;
+import io.security.corespringsecurity.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -39,8 +33,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-//    @Autowired
-//    private AccessIpRepository accessIpRepository;
+    @Autowired
+    private AccessIpRepository accessIpRepository;
 
 
 
@@ -59,7 +53,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         setupSecurityResources();
 
-//        setupAccessIpData();
+        setupAccessIpData();
 
         alreadySetup = true;
     }
@@ -68,8 +62,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Set<Role> roles = new HashSet<>();
         Role adminRole = createRoleIfNotFound("ROLE_ADMIN", "관리자");
         roles.add(adminRole);
-//        createResourceIfNotFound("/admin/**", "", roles, "url");
-//        createResourceIfNotFound("execution(public * io.security.corespringsecurity.aopsecurity.*Service.pointcut*(..))", "", roles, "pointcut");
+        createResourceIfNotFound("/admin/**", "", roles, "url");
+        createResourceIfNotFound("execution(public * io.security.corespringsecurity.aopsecurity.*Service.pointcut*(..))", "", roles, "pointcut");
         createUserIfNotFound("admin", "admin@admin.com", "pass", roles);
         Role managerRole = createRoleIfNotFound("ROLE_MANAGER", "매니저권한");
         Role userRole = createRoleIfNotFound("ROLE_USER", "사용자권한");
@@ -145,14 +139,22 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         childRoleHierarchy.setParentName(parentRoleHierarchy);
     } // 계층권한 세팅 부분
 
-//    private void setupAccessIpData() {
-//
-//        AccessIp byIpAddress = accessIpRepository.findByIpAddress("0:0:0:0:0:0:0:1");
-//        if (byIpAddress == null) {
-//            AccessIp accessIp = AccessIp.builder()
-//                    .ipAddress("0:0:0:0:0:0:0:1")
-//                    .build();
-//            accessIpRepository.save(accessIp);
-//        }
-//    }
+    private void setupAccessIpData() {
+
+        AccessIp byIpAddress = accessIpRepository.findByIpAddress("0:0:0:0:0:0:0:1");
+        if (byIpAddress == null) {
+            AccessIp accessIp = AccessIp.builder()
+                    .ipAddress("0:0:0:0:0:0:0:1")
+                    .build();
+            accessIpRepository.save(accessIp);
+        }
+
+        AccessIp byIpAddressLocal = accessIpRepository.findByIpAddress("127.0.0.1");
+        if (byIpAddress == null) {
+            AccessIp accessIp = AccessIp.builder()
+                    .ipAddress("127.0.0.1")
+                    .build();
+            accessIpRepository.save(accessIp);
+        }
+    }
 }

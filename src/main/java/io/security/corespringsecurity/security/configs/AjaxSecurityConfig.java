@@ -8,6 +8,7 @@ import io.security.corespringsecurity.security.handler.AjaxAuthenticationFailure
 import io.security.corespringsecurity.security.handler.AjaxAuthenticationSuccessHandler;
 import io.security.corespringsecurity.security.metadatasource.UrlFilterInvocationSecurityMetaDataSource;
 import io.security.corespringsecurity.security.provider.AjaxAuthenticationProvider;
+import io.security.corespringsecurity.security.voter.IpAddressVoter;
 import io.security.corespringsecurity.service.SecurityResourceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -141,7 +142,7 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public FilterSecurityInterceptor customFilterSecurityInterceptor() throws Exception {
         //FilterSecurityInterceptor filterSecurityInterceptor = new FilterSecurityInterceptor();
-        PermitAllFilter filterSecurityInterceptor = new PermitAllFilter();
+        PermitAllFilter filterSecurityInterceptor = new PermitAllFilter(permitAllResources);
         filterSecurityInterceptor.setSecurityMetadataSource(urlFilterInvocationSecurityMetadataSource());
         filterSecurityInterceptor.setAccessDecisionManager(affirmativeBased());
         filterSecurityInterceptor.setAuthenticationManager(authenticationManagerBean());
@@ -161,7 +162,13 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
     //voter 추가 계층 권한 설정
    private List<AccessDecisionVoter<?>> getAccessDecisionVoters() {
         List<AccessDecisionVoter<? extends Object>> accessDecisionVoters = new ArrayList<>();
+        IpAddressVoter ipAddressVoter = new IpAddressVoter();
+        ipAddressVoter.setResourceService(securityResourceService);
+        accessDecisionVoters.add(ipAddressVoter);
         accessDecisionVoters.add(roleVoter());
+        //accessDecisionVoters.add(new IpAddressVoter());
+        //voter 심의시 가장 먼저 등록된 아이부터 등록이 된다.
+       // granted 순간 먼저 바로 허용되기 때문임.
 
         //return Arrays.asList(new RoleVoter());
         return accessDecisionVoters;
